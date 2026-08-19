@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Ignorar datasets y archivos de datos locales
+data/
+datasets/
+*.csv
+*.parquet
+*.json
