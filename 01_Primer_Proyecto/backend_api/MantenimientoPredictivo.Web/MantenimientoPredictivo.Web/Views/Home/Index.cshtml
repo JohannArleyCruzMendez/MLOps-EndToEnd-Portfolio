@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Diagnóstico NASA";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4 fw-bold">Sistema de Mantenimiento Predictivo</h1>
+    <p class="lead">Integración .NET Core y AI Microservice (FastAPI)</p>
+
+   
+    <form asp-action="Predecir" method="post" class="mt-4 mx-auto" style="max-width: 800px;">
+        <div class="mb-4 text-start">
+            <label for="datosEntrada" class="form-label fw-bold">Ingrese los 21 parámetros de telemetría (separados por coma):</label>
+            <textarea class="form-control font-monospace" id="datosEntrada" name="datosEntrada" rows="3" required
+                      placeholder="Ej: 0.002, -0.0003, 518.67, 642.15, ..."></textarea>
+            <div class="form-text">Pegue los valores decimales extraídos del sensor del motor usando punto (.) para los decimales.</div>
+        </div>
+        <button type="submit" class="btn btn-dark btn-lg px-5 py-3 w-100">
+            Ejecutar Diagnóstico del Motor
+        </button>
+    </form>
+
+
+    <!-- Zona de Resultados -->
+    <div class="mt-5">
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-warning">@ViewBag.Error</div>
+        }
+        else if (ViewBag.AlertaFallo != null)
+        {
+            if (ViewBag.AlertaFallo == 1)
+            {
+                <div class="alert alert-danger shadow-sm border-danger p-4" role="alert">
+                    <h2 class="alert-heading text-danger">¡ALERTA DE FALLO INMINENTE!</h2>
+                    <hr>
+                    <p class="mb-0 fs-5">El modelo detectó una anomalía crítica. El motor requiere mantenimiento preventivo inmediato (RUL &lt;= 30 ciclos).</p>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success shadow-sm border-success p-4" role="alert">
+                    <h2 class="alert-heading text-success">Motor Operando Normalmente</h2>
+                    <hr>
+                    <p class="mb-0 fs-5">Los parámetros de telemetría están dentro de los rangos seguros.</p>
+                </div>
+            }
+        }
+    </div>
+</div>
