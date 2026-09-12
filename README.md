@@ -16,6 +16,19 @@ Solución de Inteligencia Artificial diseñada para anticipar fallos inminentes 
 
 ---
 
+2. Clasificador de Anomalías en Fresadoras CNC (Clean Architecture)
+Estado: Completado ✅
+
+Sistema de diagnóstico en tiempo real para identificar fallos críticos por sobreesfuerzo (OSF) y otras anomalías operativas en maquinaria CNC. Este proyecto destaca por su diseño modular implementando Arquitectura Limpia (Clean Architecture) y el patrón CQRS para una comunicación eficiente.
+
+AI Microservice (ML Engine): Modelo de Machine Learning en Python que evalúa parámetros físicos (temperatura, rotación, torque, desgaste de herramienta) para determinar si la máquina requiere mantenimiento inmediato.
+
+Backend API (.NET 8): API desarrollada bajo Clean Architecture utilizando MediatR para el enrutamiento de comandos y separación de responsabilidades. Actúa como orquestador, gestionando peticiones asíncronas hacia el motor de IA.
+
+Dashboard de Monitoreo (Frontend): Interfaz gráfica interactiva y ligera implementada en HTML, JavaScript y Bootstrap. Se sirve nativamente mediante archivos estáticos (wwwroot) desde la API de .NET, permitiendo la visualización de telemetría y alertas críticas en tiempo real sin requerir un servidor frontend independiente.
+
+➡️ Ver detalles, arquitectura y código fuente del proyecto
+
 *Proyectos adicionales en fase de desarrollo se listarán aquí próximamente...*
 
 ## 🛠️ Stack Tecnológico Principal
