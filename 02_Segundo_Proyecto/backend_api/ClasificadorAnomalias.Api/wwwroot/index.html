@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard CNC - Machine Learning</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h2 class="mb-4">Panel de Diagnóstico de Fresadora</h2>
+        <div class="row">
+            <!-- Formulario de Telemetría -->
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">Telemetría en Tiempo Real</div>
+                    <div class="card-body">
+                        <form id="telemetriaForm">
+                            <div class="mb-2">
+                                <label>Tipo de Calidad (L, M, H)</label>
+                                <select id="TipoCalidad" class="form-select">
+                                    <option value="L">L - Baja</option>
+                                    <option value="M">M - Media</option>
+                                    <option value="H">H - Alta</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label>Temp. Aire (K)</label>
+                                <input type="number" step="0.1" id="TemperaturaAire" class="form-control" value="298.1">
+                            </div>
+                            <div class="mb-2">
+                                <label>Temp. Proceso (K)</label>
+                                <input type="number" step="0.1" id="TemperaturaProceso" class="form-control" value="308.6">
+                            </div>
+                            <div class="mb-2">
+                                <label>Velocidad Rotación (RPM)</label>
+                                <input type="number" id="VelocidadRotacion" class="form-control" value="1551">
+                            </div>
+                            <div class="mb-2">
+                                <label>Torque (Nm)</label>
+                                <input type="number" step="0.1" id="Torque" class="form-control" value="42.8">
+                            </div>
+                            <div class="mb-3">
+                                <label>Desgaste Herramienta (min)</label>
+                                <input type="number" id="DesgasteHerramienta" class="form-control" value="0">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Analizar con Modelo ML</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de Resultados -->
+            <div class="col-md-7">
+                <div id="resultadoPanel" class="alert alert-secondary d-none shadow-sm">
+                    <h4 id="resultadoTitulo">Esperando datos...</h4>
+                    <hr>
+                    <p class="mb-1"><strong>Diagnóstico:</strong> <span id="resultadoDetalle">-</span></p>
+                    <p class="mb-0"><strong>Código de Clase:</strong> <span id="resultadoCodigo">-</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('telemetriaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const payload = {
+                TipoCalidad: document.getElementById('TipoCalidad').value,
+                TemperaturaAire: parseFloat(document.getElementById('TemperaturaAire').value),
+                TemperaturaProceso: parseFloat(document.getElementById('TemperaturaProceso').value),
+                VelocidadRotacion: parseInt(document.getElementById('VelocidadRotacion').value),
+                Torque: parseFloat(document.getElementById('Torque').value),
+                DesgasteHerramienta: parseInt(document.getElementById('DesgasteHerramienta').value)
+            };
+
+            try {
+                // Llama al mismo endpoint que usabas en Swagger
+                const response = await fetch('/api/Diagnostico', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                const panel = document.getElementById('resultadoPanel');
+                panel.classList.remove('d-none', 'alert-secondary', 'alert-success', 'alert-danger');
+
+                if (data.requiereMantenimiento) {
+                    panel.classList.add('alert-danger');
+                    document.getElementById('resultadoTitulo').innerText = "⚠️ ALERTA CRÍTICA";
+                } else {
+                    panel.classList.add('alert-success');
+                    document.getElementById('resultadoTitulo').innerText = "✅ OPERACIÓN SEGURA";
+                }
+
+                document.getElementById('resultadoDetalle').innerText = data.diagnosticoModelo;
+                document.getElementById('resultadoCodigo').innerText = data.codigoClase;
+
+            } catch (error) {
+                alert('Error al conectar con la API: ' + error);
+            }
+        });
+    </script>
+</body>
+</html>

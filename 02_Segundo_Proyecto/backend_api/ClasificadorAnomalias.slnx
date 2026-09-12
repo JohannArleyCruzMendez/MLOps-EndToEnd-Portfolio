@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ClasificadorAnomalias.Api/ClasificadorAnomalias.Api.csproj" />
+  <Project Path="ClasificadorAnomalias.Application/ClasificadorAnomalias.Application.csproj" />
+  <Project Path="ClasificadorAnomalias.Domain/ClasificadorAnomalias.Domain.csproj" />
+  <Project Path="ClasificadorAnomalias.Infrastructure/ClasificadorAnomalias.Infrastructure.csproj" />
+</Solution>
